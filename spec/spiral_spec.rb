@@ -36,7 +36,7 @@ describe 'spiral.rb' do
     it 'is have values other than 1..10' do
       expect { array.call(arr3) }
         .to raise_error(TwoDimArr::ArrayValueError)
-              .with_message('Wrong values in array (Each value should be Integer in 1..10 range)')
+              .with_message('Wrong values in array (Each value should be Integer in 0..10 range)')
     end
 
     it 'is have wrong name of direction' do

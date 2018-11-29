@@ -12,7 +12,7 @@ module TwoDimArr
     def initialize(arr, directions)
       @arr = arr
       @arr_flatten = arr_flttn
-      @arr_size = arr_size
+      @arr_size = array_size
       @directions = directions
     end
 
@@ -26,7 +26,6 @@ module TwoDimArr
       check_direction
       start_position = find_center_point
       result = go_spiral(start_position)
-      p "Result is #{result}"
       result.lazy.select { |e| e }
     end
 
@@ -43,11 +42,11 @@ module TwoDimArr
       end
       unless check_el_values
         raise ArrayValueError,
-              'Wrong values in array (Each value should be Integer in 1..10 range)'
+              'Wrong values in array (Each value should be Integer in 0..10 range)'
       end
     end
 
-    def arr_size
+    def array_size
       arr.size
     end
 
