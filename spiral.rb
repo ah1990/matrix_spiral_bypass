@@ -9,24 +9,23 @@ module TwoDimArr
 
   class Spiral
 
-    def initialize(arr, directions)
+    def initialize(arr, directions=[:left, :up, :right, :down])
       @arr = arr
       @arr_flatten = arr_flttn
       @arr_size = array_size
       @directions = directions
-    end
-
-    def self.call(arr, directions=[:left, :up, :right, :down])
-      inst = new(arr, directions)
-      inst.call
-    end
-
-    def call
       check_arr
       check_direction
+    end
+
+    # def self.call(arr, directions=[:left, :up, :right, :down])
+    #   inst = new(arr, directions)
+    #   inst.call
+    # end
+
+    def call
       start_position = find_center_point
-      result = go_spiral(start_position)
-      result.lazy.select { |e| e }
+      go_spiral(start_position)
     end
 
     private
@@ -84,26 +83,29 @@ module TwoDimArr
       step_counts = (1..Float::INFINITY).lazy.flat_map { |e| [e, e] }
       spiral = [arr[start_position[0]][start_position[1]]]
       direction = directions.cycle
-      while spiral.size < arr_size ** 2
+      Enumerator.new do |yielder|
+        yielder.yield arr[start_position[0]][start_position[1]]
+        while spiral.size < arr_size ** 2
+          current_step_count = step_counts.next
+          current_direction = direction.next
+          current_step_count.times do
+            # return spiral if spiral.size >= arr_size ** 2
+            case current_direction
+              when :up then start_position[0] -= 1
+              when :down then start_position[0] += 1
+              when :left then start_position[1] -= 1
+              when :right then start_position[1] += 1
+              # Else never happens because check in possible_directions before
+              else raise WrongDirectionName, 'wrong name of direction'
+            end
 
-        current_step_count = step_counts.next
-        current_direction = direction.next
-        current_step_count.times do
-          return spiral if spiral.size >= arr_size ** 2
-
-          case current_direction
-            when :up then start_position[0] -= 1
-            when :down then start_position[0] += 1
-            when :left then start_position[1] -= 1
-            when :right then start_position[1] += 1
-            # Else never happens because check in possible_directions before
-            else raise WrongDirectionName, 'wrong name of direction'
+            break if start_position[0] < 0 || start_position[1] < 0
+            # p arr[start_position[0]][start_position[1]]
+            spiral << arr[start_position[0]][start_position[1]]
+            yielder.yield arr[start_position[0]][start_position[1]]
           end
-
-
-          spiral << arr[start_position[0]][start_position[1]]
         end
-      end
+      end.lazy.flat_map { |el| el }
     end
   end
 end
