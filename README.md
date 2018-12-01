@@ -12,7 +12,7 @@ In ruby console:
 require './spiral'
 result = TwoDimArr::Spiral.call(arr) # arr is valid two dimensional array with values other than 1..10
 # Or create matrix by generator
-matrix = MatrixCreator.call(5)
+matrix = MatrixCreator.call(n) # Where n = width = height
 # And call with this matrix in 1st argument
 instance = TwoDimArr::Spiral.new(matrix, [:left, :up, :right, :down]) # Create new instance of Spiral class
 @spiral = instance.call
@@ -35,7 +35,7 @@ By default:
 
 Call methods
 ```ruby
-matrix = MatrixCreator.call(5) # To create matrix
+matrix = MatrixCreator.call(n) # To create matrix
 instance = TwoDimArr::Spiral.new(matrix, [:left, :up, :right, :down]) # to create new instance of Spiral class
 spiral = instance.call
 spiral.class # => Enumerator::Lazy
